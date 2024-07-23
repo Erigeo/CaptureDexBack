@@ -5,6 +5,7 @@ import com.Erigeo.CaptureDex.models.Trainer;
 import com.Erigeo.CaptureDex.models.User;
 import com.Erigeo.CaptureDex.services.AdminService;
 import com.Erigeo.CaptureDex.services.TrainerService;
+import com.Erigeo.CaptureDex.services.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,10 +20,12 @@ public class UserController {
 
     private final AdminService adminService;
     private final TrainerService trainerService;
+    private final UserService userService;
 
-    public UserController(AdminService adminService, TrainerService trainerService) {
+    public UserController(AdminService adminService, TrainerService trainerService, UserService userService) {
         this.adminService = adminService;
         this.trainerService = trainerService;
+        this.userService = userService;
     }
 
     @PostMapping("/createAdmin")
@@ -78,7 +81,7 @@ public class UserController {
     @PutMapping("/trainer")
     public ResponseEntity<?> editTrainer(@RequestParam Long id, @RequestBody Trainer trainer) {
         try {
-            var updatedTrainer = trainerService.patchTrainer(id, trainer);
+            var updatedTrainer = trainerService.editTrainer(id, trainer);
             return ResponseEntity.status(HttpStatus.OK).body(updatedTrainer);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
@@ -136,7 +139,7 @@ public class UserController {
     @GetMapping("/users")
     public ResponseEntity<?> getAllUsers(Pageable pageable) {
         try {
-            Page<User> users = trainerService.getAllUsers(pageable);
+            Page<User> users = userService.getAllUsers(pageable);
             return ResponseEntity.ok(users);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());

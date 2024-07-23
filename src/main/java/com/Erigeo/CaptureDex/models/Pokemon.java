@@ -1,10 +1,8 @@
 package com.Erigeo.CaptureDex.models;
 
-import com.Erigeo.CaptureDex.enums.Game;
 import com.Erigeo.CaptureDex.enums.Type;
 import lombok.*;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;

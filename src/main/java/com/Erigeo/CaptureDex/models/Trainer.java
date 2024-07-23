@@ -1,6 +1,5 @@
 package com.Erigeo.CaptureDex.models;
 
-import com.Erigeo.CaptureDex.enums.Game;
 import lombok.*;
 import org.springframework.data.mongodb.core.mapping.Document;
 

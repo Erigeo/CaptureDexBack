@@ -1,6 +1,6 @@
 package com.Erigeo.CaptureDex.controllers;
 
-import com.Erigeo.CaptureDex.enums.Game;
+import com.Erigeo.CaptureDex.models.Game;
 import com.Erigeo.CaptureDex.models.Pokemon;
 import com.Erigeo.CaptureDex.services.TrainerService;
 import org.springframework.data.domain.Page;
@@ -22,7 +22,7 @@ public class TrainerController {
     }
 
     @GetMapping("/{trainerId}/pokemons")
-    public ResponseEntity<?> getTrainerPokemons(@PathVariable int trainerId, Pageable pageable) {
+    public ResponseEntity<?> getTrainerPokemons(@PathVariable Long trainerId, Pageable pageable) {
         try {
             Page<Pokemon> pokemons = trainerService.getTrainerPokemons(trainerId, pageable);
             return ResponseEntity.ok(pokemons);
