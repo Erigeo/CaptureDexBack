@@ -6,6 +6,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+import java.time.LocalDateTime;
+
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -19,6 +21,8 @@ public class User {
     private String name;
     private String email;
     private String password;
+
+    private LocalDateTime createdIn;
 
     @Field("ROLE")
     private Role role;
