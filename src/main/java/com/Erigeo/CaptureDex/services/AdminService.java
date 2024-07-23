@@ -22,4 +22,10 @@ public class AdminService {
 
     public Page<Admin> getAllAdmin(Pageable pageable) {
     }
+
+    public Admin patchAdmin(Long id, Admin admin) {
+    }
+
+    public Page<Admin> getAllAdmins(Pageable pageable) {
+    }
 }

@@ -13,11 +13,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@RestController("/users")
+@RestController
+@RequestMapping("/users")
 public class UserController {
 
     private final AdminService adminService;
-
     private final TrainerService trainerService;
 
     public UserController(AdminService adminService, TrainerService trainerService) {
@@ -25,74 +25,122 @@ public class UserController {
         this.trainerService = trainerService;
     }
 
-
     @PostMapping("/createAdmin")
-    public ResponseEntity<?> createAdmin(@RequestBody @Valid Admin admin){
-        AdminService.registerAdmin(admin);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
-
+    public ResponseEntity<?> createAdmin(@RequestBody @Valid Admin admin) {
+        try {
+            adminService.registerAdmin(admin);
+            return ResponseEntity.status(HttpStatus.CREATED).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
     }
 
     @PostMapping("/createTrainer")
-    public ResponseEntity<?> createTrainer(@RequestBody @Valid Trainer trainer){
-        TrainerService.registerTrainer(trainer);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    public ResponseEntity<?> createTrainer(@RequestBody @Valid Trainer trainer) {
+        try {
+            trainerService.registerTrainer(trainer);
+            return ResponseEntity.status(HttpStatus.CREATED).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
     }
 
-    @DeleteMapping
-    public ResponseEntity<?> deleteAdminById(@RequestParam Long id){
-        AdminService.deleteAdmin(id);
-        return ResponseEntity.status(HttpStatus.GONE).build();
+    @DeleteMapping("/admin")
+    public ResponseEntity<?> deleteAdminById(@RequestParam Long id) {
+        try {
+            adminService.deleteAdmin(id);
+            return ResponseEntity.status(HttpStatus.GONE).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
     }
 
-    @DeleteMapping
-    public ResponseEntity<?> deleteTrainer(@RequestParam Long id){
-        TrainerService.deleteTrainer(id);
-        return ResponseEntity.status(HttpStatus.GONE).build();
+    @DeleteMapping("/trainer")
+    public ResponseEntity<?> deleteTrainer(@RequestParam Long id) {
+        try {
+            trainerService.deleteTrainer(id);
+            return ResponseEntity.status(HttpStatus.GONE).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
     }
 
-    @PutMapping
-    public ResponseEntity<?> editAdmin(@RequestParam Long id, @RequestBody Admin admin){
-        var updatedAdmin =  TrainerService.patchAdmin(id, admin);
-        return ResponseEntity.status(HttpStatus.OK).body(updatedAdmin);
+    @PutMapping("/admin")
+    public ResponseEntity<?> editAdmin(@RequestParam Long id, @RequestBody Admin admin) {
+        try {
+            Admin updatedAdmin = adminService.patchAdmin(id, admin);
+            return ResponseEntity.status(HttpStatus.OK).body(updatedAdmin);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
     }
 
-    @PutMapping
-    public ResponseEntity<?> editTrainer(@RequestParam Long id, @RequestBody Trainer trainer){
-        var updatedTrainer =  TrainerService.patchTrainer(id, trainer);
-        return ResponseEntity.status(HttpStatus.OK).body(updatedTrainer);
+    @PutMapping("/trainer")
+    public ResponseEntity<?> editTrainer(@RequestParam Long id, @RequestBody Trainer trainer) {
+        try {
+            var updatedTrainer = trainerService.patchTrainer(id, trainer);
+            return ResponseEntity.status(HttpStatus.OK).body(updatedTrainer);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
     }
 
-    @GetMapping
-    public ResponseEntity<?> getAdmin(@RequestParam Long adminId ){
-        Page<Admin> admins = adminService.getAdmin(adminId);
-        return new ResponseEntity<>(admins, HttpStatus.OK);
+    @GetMapping("/admin")
+    public ResponseEntity<?> getAdmin(@RequestParam Long adminId) {
+        try {
+            var admin = adminService.getAdmin(adminId);
+            if (admin != null) {
+                return ResponseEntity.ok(admin);
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Admin not found");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
     }
 
-    @GetMapping
-    public ResponseEntity<?> getTrainer(@RequestParam Long adminId){
-        var admin =  adminService.getTrainer(adminId);
-        return new ResponseEntity<>(admin, HttpStatus.OK);
+    @GetMapping("/trainer")
+    public ResponseEntity<?> getTrainer(@RequestParam Long trainerId) {
+        try {
+            Trainer trainer = trainerService.getTrainer(trainerId);
+            if (trainer != null) {
+                return ResponseEntity.ok(trainer);
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Trainer not found");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
     }
 
-    @GetMapping
-    public ResponseEntity<?> getAllAdmins( Pageable pageable){
-        Page<Admin> admins =  adminService.getAllAdmin(pageable);
-        return new ResponseEntity<>(admins, HttpStatus.OK);
+    @GetMapping("/admins")
+    public ResponseEntity<?> getAllAdmins(Pageable pageable) {
+        try {
+            Page<Admin> admins = adminService.getAllAdmins(pageable);
+            return ResponseEntity.ok(admins);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
     }
 
-    @GetMapping
-    public ResponseEntity<?> getAllTrainers( Pageable pageable){
-        Page<Trainer> trainers =  trainerService.getAllTrainers(pageable);
-        return new ResponseEntity<>(trainers, HttpStatus.OK);
-
+    @GetMapping("/trainers")
+    public ResponseEntity<?> getAllTrainers(Pageable pageable) {
+        try {
+            Page<Trainer> trainers = trainerService.getAllTrainers(pageable);
+            return ResponseEntity.ok(trainers);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
     }
 
-    @GetMapping
-    public ResponseEntity<?> getAllUsers( Pageable pageable){
-        Page<User> users =  trainerService.getAllUsers(pageable);
-        return new ResponseEntity<>(users, HttpStatus.OK);
-
+    @GetMapping("/users")
+    public ResponseEntity<?> getAllUsers(Pageable pageable) {
+        try {
+            Page<User> users = trainerService.getAllUsers(pageable);
+            return ResponseEntity.ok(users);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
     }
-
 }
+
