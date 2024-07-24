@@ -52,7 +52,7 @@ public class TrainerController {
     }
 
     @PostMapping("/{trainerId}/games")
-    public ResponseEntity<?> postTrainerGames(@PathVariable int trainerId, @RequestBody Game game) {
+    public ResponseEntity<?> postTrainerGames(@PathVariable Long trainerId, @RequestBody Game game) {
         try {
             Game createdGame = trainerService.addGameToTrainer(trainerId, game);
             return ResponseEntity.status(HttpStatus.CREATED).body(createdGame);
@@ -62,7 +62,7 @@ public class TrainerController {
     }
 
     @PatchMapping("/{trainerId}/pokemons")
-    public ResponseEntity<?> patchTrainerPokemons(@PathVariable int trainerId, @RequestBody List<Pokemon> pokemons) {
+    public ResponseEntity<?> patchTrainerPokemons(@PathVariable Long trainerId, @RequestBody List<Pokemon> pokemons) {
         try {
             List<Pokemon> updatedPokemons = trainerService.updateTrainerPokemons(trainerId, pokemons);
             return ResponseEntity.ok(updatedPokemons);
