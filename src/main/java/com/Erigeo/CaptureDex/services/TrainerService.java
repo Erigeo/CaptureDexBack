@@ -20,7 +20,7 @@ public class TrainerService {
 
 
     private final TrainerRepository trainerRepository;
-    private CreateUserProducer createUserProducer;
+    private final CreateUserProducer createUserProducer;
 
     @Autowired
     public TrainerService(TrainerRepository trainerRepository, CreateUserProducer createUserProducer) {
