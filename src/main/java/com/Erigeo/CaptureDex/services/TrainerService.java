@@ -3,6 +3,7 @@ package com.Erigeo.CaptureDex.services;
 import com.Erigeo.CaptureDex.models.Game;
 import com.Erigeo.CaptureDex.models.Pokemon;
 import com.Erigeo.CaptureDex.models.Trainer;
+import com.Erigeo.CaptureDex.producers.CreateUserProducer;
 import com.Erigeo.CaptureDex.repositorys.PokemonRepository;
 import com.Erigeo.CaptureDex.repositorys.TrainerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,19 +20,24 @@ public class TrainerService {
 
 
     private final TrainerRepository trainerRepository;
-    private final PokemonRepository pokemonRepository;
+    private CreateUserProducer createUserProducer;
 
     @Autowired
-    public TrainerService(TrainerRepository trainerRepository, PokemonRepository pokemonRepository) {
+    public TrainerService(TrainerRepository trainerRepository, CreateUserProducer createUserProducer) {
         this.trainerRepository = trainerRepository;
-        this.pokemonRepository = pokemonRepository;
+        this.createUserProducer = createUserProducer;
     }
 
     public void registerTrainer(Trainer trainer) {
-        try{
+        try {
+            boolean trainerExists = trainerRepository.findById(trainer.getId()).isPresent();
+            if (trainerExists) {
+                throw new RuntimeException("Trainer already exists");
+            }
+            createUserProducer.publishMessageEmail(trainer);
             trainerRepository.save(trainer);
-        }catch (Exception e){
-            System.out.println(e.getMessage());
+        } catch (Exception e) {
+            throw new RuntimeException("Error registering admin", e);
         }
     }
 
