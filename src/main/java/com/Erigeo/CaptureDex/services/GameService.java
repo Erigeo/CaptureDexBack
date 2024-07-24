@@ -40,7 +40,7 @@ public class GameService {
 
     public Page<Game> getGameByConsole(String consoleName, Pageable pageable) {
         try {
-            return gameRepository.findByConsoleName(consoleName, pageable);
+            return gameRepository.findByGameConsole(consoleName, pageable);
         } catch (Exception e) {
             throw new RuntimeException("Error retrieving games by console", e);
         }

@@ -6,5 +6,5 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface GameRepository extends MongoRepository<Game, Long> {
-    Page<Game> findByConsoleName(String consoleName, Pageable pageable);
+    Page<Game> findByGameConsole(String consoleName, Pageable pageable);
 }
