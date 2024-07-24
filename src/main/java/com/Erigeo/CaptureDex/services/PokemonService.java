@@ -81,7 +81,7 @@ public class PokemonService {
 
     public Page<Pokemon> getAllPokemons(Pageable pageable) {
         try{
-            Page<Pokemon> pokemonfounded = pokemonRepository.findAll(pageable)
+            Page<Pokemon> pokemonfounded = pokemonRepository.findAll(pageable);
             if(pokemonfounded.isEmpty()){
                 throw new RuntimeException("Pokemons not found in system");
             }
