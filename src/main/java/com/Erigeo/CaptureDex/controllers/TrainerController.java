@@ -32,7 +32,7 @@ public class TrainerController {
     }
 
     @GetMapping("/{trainerId}/games")
-    public ResponseEntity<?> getTrainerGames(@PathVariable int trainerId, Pageable pageable) {
+    public ResponseEntity<?> getTrainerGames(@PathVariable Long trainerId, Pageable pageable) {
         try {
             Page<Game> games = trainerService.getTrainerGames(trainerId, pageable);
             return ResponseEntity.ok(games);
@@ -42,7 +42,7 @@ public class TrainerController {
     }
 
     @PostMapping("/{trainerId}/pokemons")
-    public ResponseEntity<?> postTrainerPokemon(@PathVariable int trainerId, @RequestBody Pokemon pokemon) {
+    public ResponseEntity<?> postTrainerPokemon(@PathVariable Long trainerId, @RequestBody Pokemon pokemon) {
         try {
             Pokemon createdPokemon = trainerService.addPokemonToTrainer(trainerId, pokemon);
             return ResponseEntity.status(HttpStatus.CREATED).body(createdPokemon);
@@ -72,7 +72,7 @@ public class TrainerController {
     }
 
     @PatchMapping("/{trainerId}/games")
-    public ResponseEntity<?> patchTrainerGames(@PathVariable int trainerId, @RequestBody List<Game> games) {
+    public ResponseEntity<?> patchTrainerGames(@PathVariable Long trainerId, @RequestBody List<Game> games) {
         try {
             List<Game> updatedGames = trainerService.updateTrainerGames(trainerId, games);
             return ResponseEntity.ok(updatedGames);
@@ -82,7 +82,7 @@ public class TrainerController {
     }
 
     @DeleteMapping("/{trainerId}/games/{gameId}")
-    public ResponseEntity<?> removeTrainerGame(@PathVariable int trainerId, @PathVariable Long gameId) {
+    public ResponseEntity<?> removeTrainerGame(@PathVariable Long trainerId, @PathVariable Long gameId) {
         try {
             trainerService.removeTrainerGame(trainerId, gameId);
             return ResponseEntity.noContent().build();
@@ -92,7 +92,7 @@ public class TrainerController {
     }
 
     @DeleteMapping("/{trainerId}/pokemons/{number}")
-    public ResponseEntity<?> removeTrainerPokemon(@PathVariable int trainerId, @PathVariable int number) {
+    public ResponseEntity<?> removeTrainerPokemon(@PathVariable Long trainerId, @PathVariable int number) {
         try {
             trainerService.removeTrainerPokemon(trainerId, number);
             return ResponseEntity.noContent().build();
