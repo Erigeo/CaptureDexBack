@@ -45,7 +45,7 @@ public class GameController {
     @GetMapping("/console")
     public ResponseEntity<?> getGamesByconsole(String consoleName, Pageable pageable) {
         try {
-            Page<Game> games = gameService.getGameByConsole(consoleName);
+            Page<Game> games = gameService.getGameByConsole(consoleName, pageable);
             return ResponseEntity.ok(games);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
