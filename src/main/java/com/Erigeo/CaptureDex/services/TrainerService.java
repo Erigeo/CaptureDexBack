@@ -20,6 +20,8 @@ public class TrainerService {
 
 
     private final TrainerRepository trainerRepository;
+
+    @Autowired
     private final CreateUserProducer createUserProducer;
 
     @Autowired
@@ -34,10 +36,11 @@ public class TrainerService {
             if (trainerExists) {
                 throw new RuntimeException("Trainer already exists");
             }
+            System.out.println("aquii");
             createUserProducer.publishMessageEmail(trainer);
             trainerRepository.save(trainer);
         } catch (Exception e) {
-            throw new RuntimeException("Error registering admin", e);
+            throw new RuntimeException("Error registering trainer", e);
         }
     }
 

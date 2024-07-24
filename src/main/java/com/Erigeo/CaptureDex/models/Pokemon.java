@@ -4,6 +4,7 @@ import com.Erigeo.CaptureDex.enums.Type;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.util.List;
 
@@ -23,6 +24,7 @@ public class Pokemon {
 
     private List<Type> types;
 
+    @Field("GAMES")
     private List<Game> games;
 
     private String image;
