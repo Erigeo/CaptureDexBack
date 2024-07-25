@@ -57,8 +57,8 @@ public class UserController {
         }
     }
 
-    @DeleteMapping("/admin")
-    public ResponseEntity<?> deleteAdminById(@RequestParam Long id) {
+    @DeleteMapping("/admin/{id}")
+    public ResponseEntity<?> deleteAdminById(@PathVariable Long id) {
         try {
             adminService.deleteAdmin(id);
             return ResponseEntity.status(HttpStatus.GONE).build();
@@ -67,8 +67,8 @@ public class UserController {
         }
     }
 
-    @DeleteMapping("/trainer")
-    public ResponseEntity<?> deleteTrainer(@RequestParam Long id) {
+    @DeleteMapping("/trainer/{id}")
+    public ResponseEntity<?> deleteTrainer(@PathVariable Long id) {
         try {
             trainerService.deleteTrainer(id);
             return ResponseEntity.status(HttpStatus.GONE).build();
@@ -77,8 +77,8 @@ public class UserController {
         }
     }
 
-    @PutMapping("/admin")
-    public ResponseEntity<?> editAdmin(@RequestParam Long id, @RequestBody Admin admin) {
+    @PutMapping("/admin/{id}")
+    public ResponseEntity<?> editAdmin(@PathVariable Long id, @RequestBody Admin admin) {
         try {
             Admin updatedAdmin = adminService.patchAdmin(id, admin);
             return ResponseEntity.status(HttpStatus.OK).body(updatedAdmin);
@@ -87,8 +87,8 @@ public class UserController {
         }
     }
 
-    @PutMapping("/trainer")
-    public ResponseEntity<?> editTrainer(@RequestParam Long id, @RequestBody Trainer trainer) {
+    @PutMapping("/trainer/{id}")
+    public ResponseEntity<?> editTrainer(@PathVariable Long id, @RequestBody Trainer trainer) {
         try {
             var updatedTrainer = trainerService.editTrainer(id, trainer);
             return ResponseEntity.status(HttpStatus.OK).body(updatedTrainer);
@@ -97,8 +97,8 @@ public class UserController {
         }
     }
 
-    @GetMapping("/admin")
-    public ResponseEntity<?> getAdmin(@RequestParam Long adminId) {
+    @GetMapping("/admin/{adminId}")
+    public ResponseEntity<?> getAdmin(@PathVariable Long adminId) {
         try {
             var admin = adminService.getAdmin(adminId);
             if (admin != null) {
