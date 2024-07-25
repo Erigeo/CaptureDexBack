@@ -116,7 +116,10 @@ public class UserController {
         try {
             Trainer trainer = trainerService.getTrainer(trainerId);
             if (trainer != null) {
-                return ResponseEntity.ok(trainer);
+                return ResponseEntity
+                        .ok()
+                        .contentType(MediaTypes.HAL_JSON)
+                        .body(trainerModelAssembler.toModel(trainer));
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Trainer not found");
             }

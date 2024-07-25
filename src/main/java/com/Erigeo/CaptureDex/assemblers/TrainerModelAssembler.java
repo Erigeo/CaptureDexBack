@@ -23,6 +23,9 @@ public class TrainerModelAssembler implements RepresentationModelAssembler<Train
 
         return EntityModel.of(trainer,
                 linkTo(methodOn(UserController.class).getTrainer(trainer.getId()))
-                        .withSelfRel());
+                        .withSelfRel(),
+                linkTo(methodOn(UserController.class).getAllTrainers(Pageable.unpaged())) // Use a default Pageable
+                        .withRel("allTrainers"));
+
     }
 }
