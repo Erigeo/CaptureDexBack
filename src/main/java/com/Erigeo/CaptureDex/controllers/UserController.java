@@ -1,5 +1,6 @@
 package com.Erigeo.CaptureDex.controllers;
 
+import com.Erigeo.CaptureDex.assemblers.TrainerModelAssembler;
 import com.Erigeo.CaptureDex.models.Admin;
 import com.Erigeo.CaptureDex.models.Trainer;
 import com.Erigeo.CaptureDex.models.User;
@@ -10,6 +11,9 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.MediaTypes;
+import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,11 +25,16 @@ public class UserController {
     private final AdminService adminService;
     private final TrainerService trainerService;
     private final UserService userService;
+    private final PagedResourcesAssembler<Trainer> pagedResourcesAssembler;
+    private final TrainerModelAssembler trainerModelAssembler;
 
-    public UserController(AdminService adminService, TrainerService trainerService, UserService userService) {
+
+    public UserController(AdminService adminService, TrainerService trainerService, UserService userService, TrainerModelAssembler trainerModelAssembler, PagedResourcesAssembler<Trainer> pagedResourcesAssembler) {
         this.adminService = adminService;
         this.trainerService = trainerService;
         this.userService = userService;
+        this.pagedResourcesAssembler = pagedResourcesAssembler;
+        this.trainerModelAssembler = trainerModelAssembler;
     }
 
     @PostMapping("/createAdmin")
@@ -102,8 +111,8 @@ public class UserController {
         }
     }
 
-    @GetMapping("/trainer")
-    public ResponseEntity<?> getTrainer(@RequestParam Long trainerId) {
+    @GetMapping("/trainer/{trainerId}")
+    public ResponseEntity<?> getTrainer(@PathVariable Long trainerId) {
         try {
             Trainer trainer = trainerService.getTrainer(trainerId);
             if (trainer != null) {
@@ -130,7 +139,10 @@ public class UserController {
     public ResponseEntity<?> getAllTrainers(Pageable pageable) {
         try {
             Page<Trainer> trainers = trainerService.getAllTrainers(pageable);
-            return ResponseEntity.ok(trainers);
+            return ResponseEntity
+                    .ok()
+                    .contentType(MediaTypes.HAL_JSON)
+                    .body(pagedResourcesAssembler.toModel(trainers, trainerModelAssembler));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
